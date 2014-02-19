@@ -11,7 +11,7 @@ module Devise
         if code = client.authorization_codes.find_by_token(params[:code])
           success! code.user
         else
-          oauth_error! :invalid_grant, 'invalid authorization code request'
+          oauth_error! resource.unauthenticated_message
         end
       end
     end

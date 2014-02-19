@@ -1,4 +1,5 @@
 require 'devise/strategies/base'
+require 'devise/oauth2_providable/custom_authenticatable_error'
 
 module Devise
   module Strategies
@@ -7,6 +8,7 @@ module Devise
         @req = Rack::OAuth2::Server::Resource::Bearer::Request.new(env)
         @req.oauth2?
       end
+
       def authenticate!
         @req.setup!
         token = Devise::Oauth2Providable::AccessToken.find_by_token @req.access_token
@@ -15,7 +17,7 @@ module Devise
         if validate(resource)
           success! resource
         else
-          fail(:invalid_token)
+          oauth_error! :invalid
         end
       end
     end

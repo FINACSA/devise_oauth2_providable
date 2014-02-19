@@ -10,9 +10,15 @@ module Devise
       def authenticate_grant_type(client)
         resource = mapping.to.find_for_authentication(mapping.to.authentication_keys.first => params[:username])
         if validate(resource) { resource.valid_password?(params[:password]) }
-          success! resource
+          access_token = Devise::Oauth2Providable::AccessToken.
+            where('user_id = ? AND expires_at >= ?', resource.id, DateTime.current)
+          if access_token.blank?
+            success! resource
+          else
+            oauth_error! :session_limited
+          end
         else
-          oauth_error! :invalid_grant, 'invalid password authentication request'
+          oauth_error! resource.unauthenticated_message
         end
       end
     end
