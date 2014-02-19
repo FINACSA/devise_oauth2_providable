@@ -7,11 +7,21 @@ class Devise::Oauth2Providable::TokensController < ApplicationController
     @access_token = @refresh_token.access_tokens.create!(:client => oauth2_current_client, :user => current_user)
     render :json => @access_token.token_response
   end
+
+  def destroy
+    access_token = Devise::Oauth2Providable::AccessToken.user_token(current_user.id)
+    if access_token.destroy
+      render json: 'success'
+    else
+      render json: 'no success'
+  end
+
   private
-  def oauth2_current_client
-   env[Devise::Oauth2Providable::CLIENT_ENV_REF]
-  end
-  def oauth2_current_refresh_token
-    env[Devise::Oauth2Providable::REFRESH_TOKEN_ENV_REF]
-  end
+    def oauth2_current_client
+     env[Devise::Oauth2Providable::CLIENT_ENV_REF]
+    end
+
+    def oauth2_current_refresh_token
+      env[Devise::Oauth2Providable::REFRESH_TOKEN_ENV_REF]
+    end
 end
