@@ -1,5 +1,4 @@
 require 'devise/strategies/base'
-require 'devise/oauth2_providable/custom_authenticatable_error'
 
 module Devise
   module Strategies
@@ -16,13 +15,6 @@ module Devise
       def authenticate_grant_type(client)
       end
 
-      def oauth_error!(error_code = :invalid_request)
-        body = {:error => error_code}
-        body[:error_description] = I18n.t("devise.fail.#{error_code.to_s}")
-        custom! [401, {'Content-Type' => 'application/json'}, [body.to_json]]
-        throw :warden
-      end
-
       def authenticate!
         client_id, client_secret = request.authorization ? decode_credentials : [params[:client_id], params[:client_secret]]
         client = Devise::Oauth2Providable::Client.find_by_identifier client_id
@@ -32,6 +24,13 @@ module Devise
         else
           oauth_error! :invalid
         end
+      end
+
+      def oauth_error!(error_code = :invalid_request)
+        body = {:error => error_code}
+        body[:error_description] = I18n.t("devise.fail.#{error_code.to_s}")
+        custom! [401, {'Content-Type' => 'application/json'}, [body.to_json]]
+        throw :warden
       end
     end
   end
