@@ -10,6 +10,7 @@ require 'devise/oauth2_providable/models/oauth2_providable'
 require 'devise/oauth2_providable/models/oauth2_password_grantable'
 require 'devise/oauth2_providable/models/oauth2_refresh_token_grantable'
 require 'devise/oauth2_providable/models/oauth2_authorization_code_grantable'
+require 'devise/oauth2_providable/custom_authenticatable_error'
 
 module Devise
   module Oauth2Providable
@@ -22,19 +23,6 @@ module Devise
       end
       def table_name_prefix
         'oauth2_'
-      end
-    end
-  end
-end
-
-module Devise
-  module Models
-    module Authenticatable
-      def oauth_error!(error_code = :invalid)
-        body = {:error => error_code}
-        body[:error_description] = I18n.t("devise.fail.#{error_code.to_s}")
-        custom! [401, {'Content-Type' => 'application/json'}, [body.to_json]]
-        throw :warden
       end
     end
   end
