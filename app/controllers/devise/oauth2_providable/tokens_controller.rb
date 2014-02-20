@@ -1,6 +1,6 @@
 class Devise::Oauth2Providable::TokensController < ApplicationController
   before_filter :authenticate_user!
-  skip_before_filter :verify_authenticity_token, :only => :create
+  skip_before_filter :verify_authenticity_token, only: [ :create, :destroy ]
 
   def create
     @refresh_token = oauth2_current_refresh_token || oauth2_current_client.refresh_tokens.create!(:user => current_user)
@@ -9,11 +9,8 @@ class Devise::Oauth2Providable::TokensController < ApplicationController
   end
 
   def destroy
-    access_token = Devise::Oauth2Providable::AccessToken.user_token(current_user.id)
-    if access_token.destroy
-      render json: 'success'
-    else
-      render json: 'no success'
+    access_token = Devise::Oauth2Providable::AccessToken.user_token(current_user.id).first
+    access_token.delete if access_token
   end
 
   private
