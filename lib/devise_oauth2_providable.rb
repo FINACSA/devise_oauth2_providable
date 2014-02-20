@@ -10,7 +10,6 @@ require 'devise/oauth2_providable/models/oauth2_providable'
 require 'devise/oauth2_providable/models/oauth2_password_grantable'
 require 'devise/oauth2_providable/models/oauth2_refresh_token_grantable'
 require 'devise/oauth2_providable/models/oauth2_authorization_code_grantable'
-require 'devise/oauth2_providable/custom_authenticatable_error'
 
 module Devise
   module Oauth2Providable
