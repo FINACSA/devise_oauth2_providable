@@ -1,4 +1,5 @@
 require 'devise/strategies/base'
+require 'devise/oauth2_providable/custom_authenticatable_error'
 
 module Devise
   module Strategies
