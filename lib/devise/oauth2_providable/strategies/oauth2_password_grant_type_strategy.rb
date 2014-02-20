@@ -1,5 +1,4 @@
 require 'devise/oauth2_providable/strategies/oauth2_grant_type_strategy'
-require 'devise/oauth2_providable/custom_authenticatable_error'
 
 module Devise
   module Strategies

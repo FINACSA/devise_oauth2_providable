@@ -3,7 +3,7 @@ require 'devise/oauth2_providable/custom_authenticatable_error'
 
 module Devise
   module Strategies
-    class Oauth2Providable < Authenticatable
+    class Oauth2Providable < Oauth2GrantTypeStrategy
       def valid?
         @req = Rack::OAuth2::Server::Resource::Bearer::Request.new(env)
         @req.oauth2?
