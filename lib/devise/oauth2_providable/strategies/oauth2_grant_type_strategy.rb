@@ -1,5 +1,4 @@
 require 'devise/strategies/base'
-require 'devise/oauth2_providable/custom_authenticatable_error'
 
 module Devise
   module Strategies
@@ -15,6 +14,7 @@ module Devise
       # defined by subclass
       def authenticate_grant_type(client)
       end
+
       def authenticate!
         client_id, client_secret = request.authorization ? decode_credentials : [params[:client_id], params[:client_secret]]
         client = Devise::Oauth2Providable::Client.find_by_identifier client_id

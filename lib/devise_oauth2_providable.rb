@@ -27,6 +27,19 @@ module Devise
   end
 end
 
+module Devise
+  module Models
+    module Authenticatable
+      def oauth_error!(error_code = :invalid)
+        body = {:error => error_code}
+        body[:error_description] = I18n.t("devise.fail.#{error_code.to_s}")
+        custom! [401, {'Content-Type' => 'application/json'}, [body.to_json]]
+        throw :warden
+      end
+    end
+  end
+end
+
 Devise.add_module(:oauth2_providable,
   :strategy => true,
   :model => 'devise/oauth2_providable/models/oauth2_providable')
