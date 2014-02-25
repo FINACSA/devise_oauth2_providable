@@ -6,8 +6,6 @@ class Devise::Oauth2Providable::AccessToken < ActiveRecord::Base
 
   scope :user_token, ->(user_id) { where('user_id = ? AND expires_at >= ?', user_id, DateTime.current) }
 
-  attr_accessible :refresh_token
-
   def token_response
     response = {
       :access_token => token,
