@@ -12,7 +12,11 @@ module Devise
           env[Devise::Oauth2Providable::REFRESH_TOKEN_ENV_REF] = refresh_token
           success! refresh_token.user
         else
-          oauth_error! resource.unauthenticated_message
+          if resource.blank?
+            oauth_error! :invalid
+          else
+            oauth_error! resource.unauthenticated_message
+          end
         end
       end
     end

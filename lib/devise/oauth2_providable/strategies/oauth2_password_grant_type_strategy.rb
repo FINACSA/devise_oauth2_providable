@@ -18,7 +18,11 @@ module Devise
             oauth_error! :session_limited
           end
         else
-          oauth_error! resource.unauthenticated_message
+          if resource.blank?
+            oauth_error! :invalid
+          else
+            oauth_error! resource.unauthenticated_message
+          end
         end
       end
     end

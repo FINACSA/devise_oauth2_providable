@@ -12,7 +12,11 @@ module Devise
         if code = client.authorization_codes.find_by_token(params[:code])
           success! code.user
         else
-          oauth_error! resource.unauthenticated_message
+          if resource.blank?
+            oauth_error! :invalid
+          else
+            oauth_error! resource.unauthenticated_message
+          end
         end
       end
     end
