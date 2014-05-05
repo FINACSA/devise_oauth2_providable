@@ -10,8 +10,7 @@ module Devise
       def authenticate_grant_type(client)
         resource = mapping.to.find_for_authentication(mapping.to.authentication_keys.first => params[:username])
         if validate(resource) { resource.valid_password?(params[:password]) }
-          access_token = Devise::Oauth2Providable::AccessToken.
-            where('user_id = ? AND expires_at >= ?', resource.id, DateTime.current)
+          access_token = Devise::Oauth2Providable::AccessToken.user_token_expiration(resource.id)
           if access_token.blank?
             success! resource
           else

@@ -15,6 +15,7 @@ module Devise
         resource = token ? token.user : nil
         if validate(resource)
           request.env['devise.skip_trackable'] = true
+          token.renew_expiration
           success! resource
         else
           oauth_error! :invalid
