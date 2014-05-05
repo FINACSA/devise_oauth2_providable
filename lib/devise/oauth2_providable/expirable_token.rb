@@ -34,6 +34,11 @@ module Devise
           (expires_at - Time.now.utc).to_i
         end
 
+        def renew_expiration
+          self.expires_at = Time.now.utc + default_lifetime
+          save!
+        end
+
         # forcefully expire the token
         def expired!
           self.expires_at = Time.now.utc

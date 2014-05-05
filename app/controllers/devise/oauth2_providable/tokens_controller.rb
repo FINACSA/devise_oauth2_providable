@@ -9,7 +9,7 @@ class Devise::Oauth2Providable::TokensController < ApplicationController
   end
 
   def destroy
-    access_token = Devise::Oauth2Providable::AccessToken.user_token(current_user.id).first
+    access_token = Devise::Oauth2Providable::AccessToken.user_token_expiration(current_user.id)
     access_token.delete if access_token
     render :json => 'deleted'
   end
