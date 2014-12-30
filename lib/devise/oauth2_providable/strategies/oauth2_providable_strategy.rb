@@ -17,10 +17,13 @@ module Devise
           request.env['devise.skip_trackable'] = true
           token.renew_expiration
           success! resource
+        elsif env['action_controller.instance'].params["devise_oauth"].blank?
+          success! resource
         else
           oauth_error! :invalid
         end
       end
+
     end
   end
 end
